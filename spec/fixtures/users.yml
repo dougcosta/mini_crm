@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: userone
+  login: userone
+  crypted_password: <%= Digest::SHA1.hexdigest('test') %>
+  email: userone@domain.com
+
+two:
+  name: usertwo
+  login: usertwo
+  crypted_password: 2e6f9b0d5885b6010f9167787445617f553a735f
+  email: usertwo@domain.com

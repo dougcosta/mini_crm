@@ -1,0 +1,32 @@
+require 'stories/helper'
+
+steps_for(:new_user) do
+	Given "the username $user" do |user|
+	end	
+	Given "the password $password" do |password|
+	end	
+	Given "the email $email" do |email|
+	end	
+	When "the login form is submited" do
+	end	
+	When "the registration form is submited" do
+	end	
+	When "there is no other user with the same e-mail or email" do
+	end	
+	When "there is already another user with the same name or email" do
+	end	
+	Then "the registration should fail" do
+	end	
+	Then "the registration should be OK" do
+	end	
+	Then "the registration form should apear again" do
+	end	
+	Then "the user should be redirected to /" do
+	end	
+	Then "the login form should be shown again" do
+	end
+end
+
+with_steps_for :new_user do 
+	run "#{dir = File.dirname(__File__)}/new_user.txt"
+end

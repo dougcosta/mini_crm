@@ -1,0 +1,31 @@
+<html>
+	<head>
+		<title>Mini CRM</title>
+		<%= stylesheet_link_tag "padrao" %>
+		<%= javascript_link_tag :defaults %>
+	</head>
+	<body>
+		<div id="content_border">
+			<div id="header">
+				<h1>Mini CRM</h1>
+			</div>
+			<div id="sidebar">
+				<h2>Meus Registros</h2>
+				<ul>
+					<li><%= link_to "Empresas", user_companies_path(User.current_user)%></li>
+					<li><%= link_to "Contatos", user_contacts_path(User.current_user)%></li>
+					<li><%= link_to "Eventos", user_events_path(User.current_user)%></li>
+				</ul>
+				<h2>Meus Registros</h2>
+				<ul>
+					<li><%= link_to "Empresas", companies_path%></li>
+					<li><%= link_to "Contatos", contacts_path%></li>
+					<li><%= link_to "Eventos", events_path%></li>
+				</ul>
+			</div>
+			<div id="content">
+				<%= yield %>
+			</div>
+		</div>
+	</body>
+</html>

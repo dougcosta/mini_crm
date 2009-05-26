@@ -1,0 +1,137 @@
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+
+describe Contact do
+	fixtures :companies
+  before(:each)
+  	@contact = Contact.new
+  	User.current_user = users(:one)
+  end
+  
+  it "should set the creator and changer users" do
+  	@contact.name = "asda1"
+  	@contact.address = "asda1"
+  	@contact.email = "adsdsds1@mas.ca"
+  	@contact.since = Date.today
+  	@contact.save!
+  	
+  	@contact.creator.should == users(:one)
+  	@contact.changer.should == users(:one)
+  	@contact.address = "other address"  	
+  	User.current_user = users(:two)
+  	@contact.save!
+  	
+  	@contact.creator.should == users(:one)
+  	@contact.changer.should == users(:two)
+  end
+
+  it "should require name address email and since" do
+    @contact.should_not be_valid
+    @contact.should have_at_last(1).errors_on(:name)
+    @contact.should have_at_last(1).errors_on(:address)
+    @contact.should have_at_last(1).errors_on(:email)
+    @contact.should have_at_last(1).errors_on(:since)
+
+    @contact.name = "asda"
+    @contact.address = "asda"
+    @contact.name = "asda"
+    @contact.email = "asdasd@mas.ca"
+    @contact.since = Date.today
+    @contact.should be_valid
+
+    @contact.should have(:no).errors_on(:name)
+    @contact.should have(:no).errors_on(:address)
+    @contact.should have(:no).errors_on(:email)
+    @contact.should have(:no).errors_on(:since)    
+  end
+  
+  it "should validate the home page if provided" do
+  	@contact.should_not be_valid
+  	@contact.should have(:no).error_on(:home_page)
+
+  	@contact.home_page = "a"
+  	@contact.should_not be_valid
+  	@contact.should have(1).error_on(:home_page)
+  	
+  	@contact.home_page = "ftp://test"
+  	@contact.should_not be_valid
+  	@contact.should have(1).error_on(:home_page)
+  	
+  	@contact.home_page = "ftp://test.com"
+  	@contact.should_not be_valid
+  	@contact.should have(1).error_on(:home_page)
+  	
+  	@contact.home_page = "http://test"
+  	@contact.should_not be_valid
+  	@contact.should have(1).error_on(:home_page)
+  	
+  	@contact.home_page = "http://test.com"
+  	@contact.should_not be_valid
+  	@contact.should have(1).error_on(:home_page)
+  	
+  	@contact.home_page = "http://test.com.br"
+  	@contact.should_not be_valid
+  	@contact.should have(:no).error_on(:home_page)
+  	
+  	@contact.home_page = "http://test.info"
+  	@contact.should_not be_valid
+  	@contact.should have(:no).error_on(:home_page)
+  end
+  
+  it "should validate email address if provided" do
+  	@contact.should_not be_valid
+  	@contact.should have(1).errors_on(:email)
+  	@contact.should have(:no).errors_on(:email1)
+  	@contact.should have(:no).errors_on(:email2)
+  	
+  	@contact.email = 'zé mané'
+  	@contact.email1 = 'zé mané'
+  	@contact.email2 = 'zé mané'
+  	@contact.should_not be_valid
+  	@contact.should have(1).errors_on(:email)
+  	@contact.should have(1).errors_on(:email1)
+  	@contact.should have(1).errors_on(:email2)
+  	
+  	@contact.email = 'ze@teste.com'
+  	@contact.email1 = 'ze@teste.com'
+  	@contact.email2 = 'ze@teste.com'
+  	@contact.should_not be_valid
+  	@contact.should have(:no).errors_on(:email)
+  	@contact.should have(:no).errors_on(:email1)
+  	@contact.should have(:no).errors_on(:email2)
+  end
+  
+  it "should validate uniqueness of fields in the company scope only" do
+  	@company = companies(:one)
+  	@contact = @company.employees.build :name => "company owner", :email => "any@any.com",
+  										:address => "address", :since => Date.today
+	@contact.should be_valid
+	@contact.save!
+	
+  	@contact = @company.employees.build :name => "company owner", :email => "any@any.com",
+  										:address => "address", :since => Date.today
+	@contact.should_not be_valid
+	@contact.save!
+	@contact.should have(1).errors_on(:name)
+	@contact.should have(1).errors_on(:email)
+	
+ 	@company = companies(:two)
+  	@contact = @company.employees.build :name => "company owner", :email => "any@any.com",
+  										:address => "address", :since => Date.today
+	@contact.should be_valid
+	@contact.save!
+  end
+  
+  it "should not accept registration of contacts in the future" do
+  	@contact.since = Date.today
+  	@contact.should_not be_valid
+  	@contact.should have(:one).errors_on(:since)
+  	
+  	@contact.since = Date.tomorrow
+  	@contact.should_not be_valid
+  	@contact.should have(1).errors_on(:since)
+  	
+  	@contact.since = Date.yesterday
+  	@contact.should_not be_valid
+  	@contact.should have(1).errors_on(:since)
+  end
+end

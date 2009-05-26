@@ -1,0 +1,12 @@
+Story: new user
+	As a company employee
+	I want to register in the CRM
+	So that I can see and manage company contacts
+
+Scenario: user with no access to the system
+	Given the username user1
+	And the password mypassword
+	When the login form is submited
+	Then the login form should be shown again
+	
+

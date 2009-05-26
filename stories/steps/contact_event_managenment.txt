@@ -1,0 +1,30 @@
+Story: contact event managenment
+  As a company employee
+  I want to register all movement from a contact, like calls and e-mails
+  So that other employees can use the information to make the company more profitable
+  
+Scenario: Receiving a call from a client
+  Given the company name "My Client"
+  And the contact name "José da silva"
+  When the search form is submited
+  Then the contact event history for the informed contact should be shown
+  Given the event description "The client want more 50 products"
+  When the register button is pressed
+  Then the last log for this contact should apear in the contact history page
+  And it should be the first record on the page
+  
+Scenario: Other contact on the same client call
+  Given the company name "My Client"
+  And the contact name "João Paulo"
+  When the search form is submited
+  Then the system should ask if I want to register a new contact for the same client
+  Given the contact information: email joao@myclient.com, home page http://joao.myclient.com, address "Meu endereço, 95"
+  When the confirmation button is pressed
+  Then the contact history page for the new contact should appear
+  And the last logs from other contacts in the same company should appear in the page
+  Given the event description "The client asked about the price for the products"
+  When the register button is pressed
+  Then the last log for this contact should apear in the contact history page
+  And it should be the first record on the page
+  And the last logs from other contacts in the same company should appear in the page
+

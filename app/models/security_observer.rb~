@@ -1,0 +1,11 @@
+class SecurityObserver < ActiveRecord::Observer
+	observe :company, :contact, :event
+	
+	def before_create(model)
+		set_creator(model)
+	end
+	
+	def before_save(model)
+		set_changer(model)
+	end
+end

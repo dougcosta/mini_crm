@@ -1,0 +1,32 @@
+<h1>Editing company</h1>
+
+<% form_for(@company) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :address %><br />
+    <%= f.text_field :address %>
+  </p>
+  <p>
+    <%= f.label :home_page %><br />
+    <%= f.text_field :home_page %>
+  </p>
+  <p>
+    <%= f.label :main_contact %><br />
+    <%= f.text_field :main_contact %>
+  </p>
+  <p>
+    <%= f.label :owner %><br />
+    <%= f.text_field :owner %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @company %> |
+<%= link_to 'Back', companies_path %>

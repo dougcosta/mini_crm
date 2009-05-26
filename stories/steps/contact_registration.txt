@@ -1,0 +1,34 @@
+Story: contact registration
+  As a company employee
+  I want to register contact in the CRM
+  So that other employees can use the information to make the company more profitable
+  
+Scenario: a new client company
+  Given the company name "My Client"
+  And the company information: address "any street, 57" and home page http://www.myclient.com
+  When the search form is submited
+  Then no results should be returned
+  When the client company registration form is submited
+  Then the company page should appear
+  
+Scenario: contacts for the new client company
+  Given the company name "My Client"
+  When the search form is submited
+  Then the company page should appear
+  When the new contact link is followed
+  Then the contact registration form should appear
+  Given the contact name "José da silva"
+  And the contact information: email jose@myclient.com, home page http://jose.myclient.com, address "Meu endereço, 57"
+  When the contact creation button is clicked
+  Then a new contact for that company should be created
+  And the company page should appear
+  And the new contact should be listed in the page
+  
+Scenario: selecting the main contact for a company
+  Given the company name "My Client"
+  When the search form is submited
+  Then the company page should appear
+  When the "main contact" link is clicked for a company contact
+  Then the selected contact should be set as the company main contact
+
+
